@@ -20,6 +20,9 @@ void UPlanetPosition::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	FString a = GetOwner()->GetName();
+
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *a);
 	
 }
 

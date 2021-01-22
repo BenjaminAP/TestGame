@@ -20,9 +20,11 @@ void UPlanetPosition::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	FString a = GetOwner()->GetName();
+	FString actorName = GetOwner()->GetName();
+	FString actorPosition = GetOwner()->GetActorLocation().ToString();
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *a);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *actorName);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *actorPosition);
 	
 }
 

@@ -23,8 +23,9 @@ void UPlanetPosition::BeginPlay()
 	FString actorName = GetOwner()->GetName();
 	FString actorPosition = GetOwner()->GetActorLocation().ToString();
 
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *actorName);
+
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *actorPosition);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *actorName);
 	
 }
 

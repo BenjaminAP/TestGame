@@ -12,17 +12,20 @@ class TESTGAME_API UDoorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	// Sets default values for this component's properties
-	UDoorComponent();
+	public:	
+		// Sets default values for this component's properties
+		UDoorComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	protected:
+		// Called when the game starts
+		virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	public:	
+		// Called every frame
+		virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	private:
+		float InitYaw;
+		float CurrentYaw;
+		float TargetYaw;
 };

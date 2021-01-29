@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/TriggerVolume.h"
+#include "Engine/Classes/Engine/World.h"
+#include "Engine/Classes/GameFramework/PlayerController.h"
+
 #include "DoorComponent.generated.h"
 
 
@@ -23,9 +27,19 @@ class TESTGAME_API UDoorComponent : public UActorComponent
 	public:	
 		// Called every frame
 		virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+		void OpenDoor(float DeltaTime);
+		void CloseDoor(float DeltaTime);
 
 	private:
 		float InitYaw;
 		float CurrentYaw;
-		float TargetYaw;
+
+		UPROPERTY(EditAnywhere)
+		float TargetOpenYaw = 90.f;
+
+		UPROPERTY(EditAnywhere)
+		ATriggerVolume* PressurePlate;
+
+		UPROPERTY(EditAnywhere)
+		AActor* ActorThatOpen;
 };

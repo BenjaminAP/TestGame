@@ -24,6 +24,10 @@ void UDoorComponent::BeginPlay()
 	CurrentYaw = InitYaw;
 	TargetOpenYaw += InitYaw;
 
+	closeDoorDelay = .5f;
+	doorOpenSpeed = 0.7f;
+	doorClosingSpeed = 5.f;
+
 	if (!PressurePlate)
 	{
 		UE_LOG(LogTemp, Error, TEXT("%s has a open Door component; pressure plate not set"), *GetOwner()->GetName());
@@ -41,25 +45,31 @@ void UDoorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	if (PressurePlate && PressurePlate->IsOverlappingActor(ActorThatOpen))
 	{
 		OpenDoor(DeltaTime);
+		lastTimeDoorOpen = GetWorld()->GetTimeSeconds();
 	}
 	else
 	{
-		CloseDoor(DeltaTime);
+		
+		if (GetWorld()->GetTimeSeconds() - lastTimeDoorOpen > closeDoorDelay)
+		{
+			CloseDoor(DeltaTime);
+		}
 	}
 	
+
 }
 
 void UDoorComponent::OpenDoor(float DeltaTime)
 {
-	CurrentYaw = FMath::Lerp(CurrentYaw, TargetOpenYaw, DeltaTime * .7f);
+	CurrentYaw = FMath::Lerp(CurrentYaw, TargetOpenYaw, DeltaTime * doorOpenSpeed);
 	FRotator DoorRotation = GetOwner()->GetActorRotation();
 	DoorRotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(DoorRotation);
 }
 
-void UDoorComponent::CloseDoor(float DeltaTime)git a
+void UDoorComponent::CloseDoor(float DeltaTime)
 {
-	CurrentYaw = FMath::Lerp(CurrentYaw, InitYaw, DeltaTime * .2f);
+	CurrentYaw = FMath::Lerp(CurrentYaw, InitYaw, DeltaTime * doorClosingSpeed);
 	FRotator DoorRotation = GetOwner()->GetActorRotation();
 	DoorRotation.Yaw = CurrentYaw;
 	GetOwner()->SetActorRotation(DoorRotation);

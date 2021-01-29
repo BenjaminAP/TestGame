@@ -33,6 +33,12 @@ class TESTGAME_API UDoorComponent : public UActorComponent
 	private:
 		float InitYaw;
 		float CurrentYaw;
+		float lastTimeDoorOpen;
+		float closeDoorDelay;
+		float doorOpenSpeed;
+		float doorClosingSpeed;
+
+
 
 		UPROPERTY(EditAnywhere)
 		float TargetOpenYaw = 90.f;

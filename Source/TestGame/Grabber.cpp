@@ -6,6 +6,8 @@
 
 #include "Grabber.h"
 
+#define OUT
+
 // Sets default values for this component's properties
 UGrabber::UGrabber()
 {
@@ -23,6 +25,9 @@ void UGrabber::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+
+	UE_LOG(LogTemp, Warning, TEXT("Grabber ready"));
+
 	
 }
 
@@ -33,5 +38,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+
+	FVector player_viewpoint_location;
+	FRotator player_viewpoint_rotation;
+
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT player_viewpoint_location, OUT player_viewpoint_rotation);
+	UE_LOG(LogTemp, Warning, TEXT("Location: %s | Rotation: %s"), *player_viewpoint_location.ToString(), *player_viewpoint_rotation.ToString());
 }
 

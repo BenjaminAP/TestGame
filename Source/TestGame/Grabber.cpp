@@ -46,14 +46,33 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT player_viewpoint_location,
 		OUT player_viewpoint_rotation
 	);
-	
-	// UE_LOG(LogTemp, Warning, TEXT("Location: %s | Rotation: %s"),
-	// 	*player_viewpoint_location.ToString(),
-	// 	*player_viewpoint_rotation.ToString()
-	// );
 
 	FVector line_trace_end = player_viewpoint_location + player_viewpoint_rotation.Vector() * 100.f;
 
-	DrawDebugLine(GetWorld(), player_viewpoint_location, line_trace_end, FColor(0, 255, 0), false, 0.f, 0, 10.f);
+	// DrawDebugLine(
+	// 	GetWorld(), 
+	// 	player_viewpoint_location, 
+	// 	line_trace_end, 
+	// 	FColor(0, 255, 0), 
+	// 	false, 0.f, 0, 10.f
+	// );
+
+	FHitResult hit;
+	FCollisionQueryParams trace_params(FName(TEXT("")), false, GetOwner());
+
+	GetWorld()->LineTraceSingleByObjectType(OUT hit, player_viewpoint_location, 
+		line_trace_end,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		trace_params
+	);
+	
+
+	if (hit.GetActor())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *hit.GetActor()->GetName());
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("No Actor collision"));
+	}
 }
 

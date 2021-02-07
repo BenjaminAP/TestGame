@@ -28,7 +28,30 @@ void UGrabber::BeginPlay()
 
 	UE_LOG(LogTemp, Warning, TEXT("Grabber ready"));
 
+	physics_handler = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	input_handler = GetOwner()->FindComponentByClass<UInputComponent>();
+
+	if (physics_handler)
+	{}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Physics Handler component missing in %s"), *GetOwner()->GetName());
+	}
 	
+	if (input_handler)
+	{
+		input_handler->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		UE_LOG(LogTemp, Error, TEXT("Input action Binded"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Input Handler component missing in %s"), *GetOwner()->GetName());
+	}
+}
+
+void UGrabber::Grab()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Interaction key pressed"));
 }
 
 
@@ -47,7 +70,7 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT player_viewpoint_rotation
 	);
 
-	FVector line_trace_end = player_viewpoint_location + player_viewpoint_rotation.Vector() * 100.f;
+	FVector line_trace_end = player_viewpoint_location + player_viewpoint_rotation.Vector() * range;
 
 	// DrawDebugLine(
 	// 	GetWorld(), 
@@ -60,7 +83,9 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	FHitResult hit;
 	FCollisionQueryParams trace_params(FName(TEXT("")), false, GetOwner());
 
-	GetWorld()->LineTraceSingleByObjectType(OUT hit, player_viewpoint_location, 
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT hit, 
+		player_viewpoint_location, 
 		line_trace_end,
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		trace_params
@@ -70,9 +95,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	if (hit.GetActor())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%s"), *hit.GetActor()->GetName());
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("No Actor collision"));
 	}
 }
 

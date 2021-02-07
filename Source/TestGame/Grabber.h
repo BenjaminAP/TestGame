@@ -2,6 +2,9 @@
 
 #pragma once
 
+
+#include "PhysicsEngine/PhysicsHandleComponent.h"
+
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Grabber.generated.h"
@@ -24,5 +27,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	float range = 100.f;
+
+	UPhysicsHandleComponent* physics_handler = nullptr;
+	UInputComponent* input_handler = nullptr;
+
+	void Grab();
+	
 };

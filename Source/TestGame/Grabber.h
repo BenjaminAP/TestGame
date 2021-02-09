@@ -29,8 +29,14 @@ public:
 
 	float range = 100.f;
 
+	bool is_grabbed = false;
+
 	UPhysicsHandleComponent* physics_handler = nullptr;
 	UInputComponent* input_handler = nullptr;
+
+	FHitResult hit;
+
+	AActor* grabbed_actor = nullptr;
 
 	void Grab();
 	

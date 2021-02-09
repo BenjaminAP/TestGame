@@ -41,7 +41,7 @@ void UGrabber::BeginPlay()
 	if (input_handler)
 	{
 		input_handler->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
-		UE_LOG(LogTemp, Error, TEXT("Input action Binded"));
+		UE_LOG(LogTemp, Warning, TEXT("Input action Binded"));
 	}
 	else
 	{
@@ -52,6 +52,22 @@ void UGrabber::BeginPlay()
 void UGrabber::Grab()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Interaction key pressed"));
+
+	if (hit.GetActor())
+	{
+		if (is_grabbed)
+		{
+			is_grabbed = !is_grabbed;
+			UE_LOG(LogTemp, Warning, TEXT("%s let go"), *grabbed_actor->GetName());
+			grabbed_actor = nullptr;
+		}
+		else
+		{
+			grabbed_actor = hit.GetActor();
+			is_grabbed = true;
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *grabbed_actor->GetName());
+		}
+	}
 }
 
 
@@ -80,7 +96,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	// 	false, 0.f, 0, 10.f
 	// );
 
-	FHitResult hit;
 	FCollisionQueryParams trace_params(FName(TEXT("")), false, GetOwner());
 
 	GetWorld()->LineTraceSingleByObjectType(
@@ -90,11 +105,17 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
 		trace_params
 	);
+
+	if (grabbed_actor && is_grabbed)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("%s is grabbed"), *grabbed_actor->GetName());
+		grabbed_actor->SetActorLocation(line_trace_end, false, nullptr, ETeleportType::TeleportPhysics);
+	}
 	
 
-	if (hit.GetActor())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *hit.GetActor()->GetName());
-	}
+	// if (hit.GetActor())
+	// {
+	// 	UE_LOG(LogTemp, Warning, TEXT("%s"), *hit.GetActor()->GetName());
+	// }
 }
 
